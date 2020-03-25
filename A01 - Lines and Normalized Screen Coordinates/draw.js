@@ -15,9 +15,17 @@ function draw() {
 
 function draw2() {
 	// this function is to draw a circle
-	calculateCirclePoints(0.0, 0.0, 0, 360, 0.5, 128);
+	calculateCirclePoints(0.0, 0.0, 0, 360, 1.0, 128);
+	drawYin_Yang()
 }
 
+function drawYin_Yang() {
+	calculateCirclePoints(0.0, -0.4, 0, 360, 0.2, 128);
+	calculateCirclePoints(0.0, 0.4, 0, 360, 0.2, 128);
+	calculateCirclePoints(0.0, 0.4, -90, 90, 0.4, 128);
+	calculateCirclePoints(0.0, -0.4, 90, 270, 0.4, 128);
+	calculateCirclePoints(0.0, 0.0, 0, 360, 0.8, 128);
+}
 function calculateCirclePoints(centerX, centerY, from_degree, to_degree, radius, polynom_aprrox) {
 	let total_degree = to_degree - from_degree;
 	calculed_angles = [from_degree];
