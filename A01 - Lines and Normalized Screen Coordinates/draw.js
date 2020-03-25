@@ -15,8 +15,20 @@ function draw() {
 
 function draw2() {
 	// this function is to draw a circle
-	for(i = 0; i < 128; i++) {
-		y = (i - 64)  / 127.0 * 1.6;
-		line(0.4, y,-0.4, y);
+	calculateCirclePoints(0.0, 0.0, 0, 360, 0.5, 128);
+}
+
+function calculateCirclePoints(centerX, centerY, from_degree, to_degree, radius, polynom_aprrox) {
+	let total_degree = to_degree - from_degree;
+	calculed_angles = [from_degree];
+	for(i = 0; i<polynom_aprrox - 1; i++) {
+		let circle_degree1 = from_degree + i*total_degree/polynom_aprrox
+		let circle_degree2 = from_degree + (i+1)*total_degree/polynom_aprrox
+		var x1 = radius * Math.cos(circle_degree1 * Math.PI / 180);
+		var y1 = radius * Math.sin(circle_degree1 * Math.PI / 180);
+		var x2 = radius * Math.cos(circle_degree2 * Math.PI / 180);
+		var y2 = radius * Math.sin(circle_degree2 * Math.PI / 180);
+		line(centerX + x1, centerY + y1, centerX + x2, centerY + y2);
 	}
 }
+
