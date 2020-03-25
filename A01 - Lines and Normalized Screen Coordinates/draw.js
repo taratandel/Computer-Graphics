@@ -3,9 +3,14 @@ function draw() {
 	// draws a line from a point at Normalized screen coordinates x1,y1 to Normalized screen coordinates x2,y2
 
 	// Here there are only three lines command, but to obtain the car you will need 8 of them
-	line(0.4, 0.4,-0.4,-0.4);
-	line(0.4,-0.4,-0.4, 0.4);
-	line(0.4,-0.3,-0.4,-0.3);
+	line(0.3, 0.3,0.3,0.1);
+  	line(0.3,0.1,0.5, 0.0);
+  	line(0.5,0.0,0.5,-0.3);
+  	line(-0.2, 0.3,-0.2,0.1);
+  	line(-0.2,0.1,-0.5, 0.0);
+  	line(-0.5,0.0,-0.5,-0.3);
+  	line(-0.2,0.3,0.3,0.3);
+  	line(-0.5,-0.3,0.5,-0.3);
 }
 
 function draw2() {
