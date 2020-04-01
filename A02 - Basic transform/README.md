@@ -33,35 +33,29 @@
 #### Flatten
 
 for example if you want to flatten x:\
-<img src="https://render.githubusercontent.com/render/math?math=S_x = 0">\
-<img src="https://render.githubusercontent.com/render/math?math=S_y = 1">\
-<img src="https://render.githubusercontent.com/render/math?math=S_z = 1">
+&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://render.githubusercontent.com/render/math?math=S_x = 0">\
+&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://render.githubusercontent.com/render/math?math=S_y = 1">\
+&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://render.githubusercontent.com/render/math?math=S_z = 1">
 
 
 ### Rotation
 
-- X rotation
-
-<img width="300" src="./images/RotateX.png">
+- X rotation\
+    <img width="300" src="./images/RotateX.png">
     
-- Y rotation
+- Y rotation\
+    <img width="300" src="./images/RotateY.png">
 
-<img width="300" src="./images/RotateY.png">
-
-- Z rotation
-
-<img width="300" src="./images/RotateZ.png">
+- Z rotation\
+    <img width="300" src="./images/RotateZ.png">
     
 ### Shear
 
-- Shear along X axis
+- Shear along X axis\
+    <img width="300" src="./images/ShearX.png">
 
-<img width="300" src="./images/ShearX.png">
+- Shear along Y axis\
+    <img width="300" src="./images/ShearY.png">
 
-- Shear along Y axis
-
-<img width="300" src="./images/ShearY.png">
-
-- Shear along Z axis
-
-<img width="300" src="./images/ShearZ.png">
+- Shear along Z axis\
+    <img width="300" src="./images/ShearZ.png">
