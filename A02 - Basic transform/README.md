@@ -6,7 +6,37 @@
 
 ### Scaling
 
-<!-- Under construction -->
+<img width="300" src="./images/Scaling.png">
+
+#### Mirroring
+
+- Planar
+
+    for example if we want to mirror along zy-plane:\
+    <img src="https://render.githubusercontent.com/render/math?math=S_x = -1">\
+    <img src="https://render.githubusercontent.com/render/math?math=S_y = 1">\
+    <img src="https://render.githubusercontent.com/render/math?math=S_z = 1">
+    
+- Axial
+
+    for example if we want to mirror along y-axis:\
+        <img src="https://render.githubusercontent.com/render/math?math=S_x = -1">\
+        <img src="https://render.githubusercontent.com/render/math?math=S_y = 1">\
+        <img src="https://render.githubusercontent.com/render/math?math=S_z = -1">
+        
+- Central
+
+    <img src="https://render.githubusercontent.com/render/math?math=S_x = -1">\
+    <img src="https://render.githubusercontent.com/render/math?math=S_y = -1">\
+    <img src="https://render.githubusercontent.com/render/math?math=S_z = -1">
+
+#### Flatten
+
+for example if you want to flatten x:\
+<img src="https://render.githubusercontent.com/render/math?math=S_x = 0">\
+<img src="https://render.githubusercontent.com/render/math?math=S_y = 1">\
+<img src="https://render.githubusercontent.com/render/math?math=S_z = 1">
+
 
 ### Rotation
 
