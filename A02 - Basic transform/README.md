@@ -2,7 +2,7 @@
 
 ### Translate
 
-<img style="width: 300px" src="./images/Translate.png">
+<img width="300" src="./images/Translate.png">
 
 ### Scaling
 
@@ -11,21 +11,27 @@
 ### Rotation
 
 - X rotation
-    <img style="width: 300px" src="./images/RotateX.png">
+
+<img width="300" src="./images/RotateX.png">
     
 - Y rotation
-    <img style="width: 300px" src="./images/RotateY.png">
+
+<img width="300" src="./images/RotateY.png">
 
 - Z rotation
-    <img style="width: 300px" src="./images/RotateZ.png">
+
+<img width="300" src="./images/RotateZ.png">
     
 ### Shear
 
 - Shear along X axis
-    <img style="width: 300px" src="./images/ShearX.png">
+
+<img width="300" src="./images/ShearX.png">
 
 - Shear along Y axis
-    <img style="width: 300px" src="./images/ShearY.png">
+
+<img width="300" src="./images/ShearY.png">
 
 - Shear along Z axis
-    <img style="width: 300px" src="./images/ShearZ.png">
+
+<img width="300" src="./images/ShearZ.png">
