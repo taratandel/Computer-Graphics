@@ -1,6 +1,7 @@
 # Orthogonal Parallel Projection
 
-orthogonal projection has three steps:\
+orthogonal projection has three steps:
+
 1. Translate center:\
 <img width="300" src="./images/TranslateCenter.png">
 
