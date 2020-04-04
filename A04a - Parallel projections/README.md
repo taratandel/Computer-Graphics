@@ -11,12 +11,12 @@ orthogonal projection has three steps:\
 <img width="300" src="./images/ConvertToLeftHanded.png">
 
 The Formula is:\
-<img width="300" src="./images/WithoutW.png">
+<img width="500" src="./images/WithoutW.png">
 
 -----
 #### With having half width
 
 The formula is:\
-<img width="300" src="./images/WithW.png">
+<img width="500" src="./images/WithW.png">
 
 
