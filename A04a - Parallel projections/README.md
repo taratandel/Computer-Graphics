@@ -2,13 +2,13 @@
 
 orthogonal projection has three steps:
 
-1. Translate center:\
+1. Translate center:
 <img width="300" src="./images/TranslateCenter.png">
 
-2. Normalize coordinates:\
+2. Normalize coordinates:
 <img width="300" src="./images/NormalaizeCordinate.png">
 
-3. Convert from right handeed to left handed:\
+3. Convert from right handeed to left handed:
 <img width="300" src="./images/ConvertToLeftHanded.png">
 
 The Formula is:\
