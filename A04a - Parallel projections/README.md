@@ -20,4 +20,6 @@ The Formula is:\
 The formula is:\
 <img width="500" src="./images/WithW.png">
 
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;w"/> is half width and 
 
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;a"/> is aspect ratio
