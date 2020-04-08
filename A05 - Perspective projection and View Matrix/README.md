@@ -4,6 +4,8 @@ The final result:
 
 <img width="500" src=./img/pers.png>
 
+In this assignment we use fov as **𝝝** and **a** is **W/H**
+
 # View Matrix
 
 ## Look-in-direction
