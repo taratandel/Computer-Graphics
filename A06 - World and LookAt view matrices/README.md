@@ -28,3 +28,8 @@ Since both the new z-axis and the new x-axis are already unit vectors, no furthe
 
 <img width="500" src="./img/Step5.png"/>
 
+
+
+# World Matrix 
+
+The World Matrix can then be computed by factorizing the five transformations in the correct order:
