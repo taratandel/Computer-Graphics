@@ -17,9 +17,23 @@ function updateWorld(rvx, rvy, rvz) {
 	let q = new Quaternion.fromEuler(utils.degToRad(euler[2]), utils.degToRad(euler[0]), utils.degToRad(euler[1]));
 
 	// compute the rotation matrix
+	// by hand matrix if nor w,x ,y, z  = 1
+	//
+	// let a = q.w;
+	// let b = q.x;
+	// let c = q.y;
+	// let d = q.z;
+	//
+	// let out = [
+	// 	1-2.0*(c*c+d*d)	, 2.0*(b*c+a*d)		,	2.0*(b*d-a*c)		, 0.0,
+	// 	2.0*(b*c-a*d)		, 1-2.0*(b*b+d*d)	,	2.0*(c*d+a*b)		, 0.0,
+	// 	2.0*(b*d+a*c)		, 2.0*(c*d-a*b)		,	1-2.0*(b*b+c*c)	, 0.0,
+	// 	0.0							, 0.0							,	0.0							, 1.0,
+	// ];
+
+	// using library
 	let out = q.toMatrix4();
 
 
 	return out;
 }
-
