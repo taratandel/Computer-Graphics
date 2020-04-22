@@ -2,7 +2,7 @@
 
 ### Triangle lists do not exploit any sharing of vertices, and encode each triangle as a set of three different coordinates.
 
-<img width="800" src="./A08%20-%20List%20strip%20and%20fan/img/CUBE.jpg">
+<img width="800" src="./img/CUBE.jpg">
 
 # Triangle Strips
 
@@ -13,7 +13,7 @@
 
 ### Triangle fans encode polygons where all the triangles share a common vertex.
 
-<img width="500" src="./A08%20-%20List%20strip%20and%20fan/img/hexshape.png">
+<img width="500" src="./img/hexshape.png">
 
-<img width="500" src="./A08%20-%20List%20strip%20and%20fan/img/hex.png">
+<img width="500" src="./img/hex.png">
 
