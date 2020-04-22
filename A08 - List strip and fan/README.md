@@ -13,7 +13,7 @@ The triangle strip logic is quite simple. Starting with the coordinates of the f
 
 sequence: ABCDEFG
 
-<img width="800" src="./img/LShape.png.jpg">
+<img width="400" src="./img/LShape.png">
 
 # Triangle Fans
 
