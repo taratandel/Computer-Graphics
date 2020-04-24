@@ -105,53 +105,34 @@ function buildGeometry() {
 	var lat_step = 10.0;
 	///// Creates vertices
 	k = 0;
-	// for(j = 0; j < 1; j++) {
 	j = 0;
-	j_last = 36;
-	j_start = 0;
 	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
-		vert4[k++] = [ - 1.0 * Math.cos(j * lat_step / 180.0 * Math.PI), 0.0, - 1.0 * Math.sin(j * lat_step / 180.0 * Math.PI)];
 		for (i = lon_start/ lon_step; i < lon_end / lon_step; i++) {
 			x = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.cos(j * lat_step / 180.0 * Math.PI)) * s;
-			y = (Math.cos(i * lon_step / 180.0 * Math.PI)) * s;
+			y = Math.cos(i * lon_step / 180.0 * Math.PI) * s;
 			z = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.sin(j * lat_step / 180.0 * Math.PI)) * s;
 
 			vert4[k++] = [x, y, z];
 		}
 	}
-	// }
 
-	// for(j = 0; j < 648; j++) {
-	// 	x = 2 * /*Math.sin(i*10.0/180.0*Math.PI) **/ Math.sin(j*10.0/180.0*Math.PI);
-	// 	y = 0.0;/*2 * Math.cos(j*10.0/180.0*Math.PI);*/
-	// 	z = 2 * Math.cos(j*10.0/180.0*Math.PI);/*/!*Math.cos(i*10.0/180.0*Math.PI) **!/ Math.sin(j*10.0/180.0*Math.PI);*/
-	// 	vert4[k++] = [x, y, z];
-	// }
-	// }
-	// vert4[k++] = [0.0,-1.0,0.0];
-
-	////// Creates indices
 	var ind4 = [];
 	k = 0;
-	var lons = lon_end / lon_step + 1;
+	var lons = parseInt((lon_end - lon_start) / lon_step, 10);
+	var lats = parseInt((lat_end - lat_start) / lat_step, 10);
 	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
-		for (i = 1; i < lons; i++) {
-			ind4[k++] = j * lons;
+		for (i = lon_start/ lon_step; i < lon_end / lon_step; i++) {
 			ind4[k++] = j * lons + i;
-			ind4[k++] = j * lons + i + 1;
+			ind4[k++] = j * lons + (i + 1) % lons;
+			ind4[k++] = ((j + 1) % lats) * lons + i;
+
+			ind4[k++] = j * lons + (i + 1) % lons;
+			ind4[k++] = ((j + 1) % lats) * lons + (i + 1) % lons;
+			ind4[k++] = ((j + 1) % lats) * lons + i;
 
 		}
-		ind4[ind4.length - 1] = j * lons + 1;
 	}
 
-	// for(i=37; i < 37 + 36; i++) {
-	// 	ind4[k++] = 0;
-	// 	ind4[k++] = i;
-	// 	ind4[k++] = i + 1;
-	// }
-	// ind4[ind4.length - 1] = 37;
-
-	console.log(ind4)
 
 	var color4 = [1.0, 1.0, 0.0];
 	addMesh(vert4, ind4, color4);
