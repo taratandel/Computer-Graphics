@@ -94,22 +94,31 @@ function buildGeometry() {
 	
 	// Draws a Torus -- To do for the assignment
 	var vert4 = [];
+	var s = 0.5; // scale
+
+	var lon_start = 0;
+	var lon_end = 360;
+	var lon_step = 10.0;
+
+	var lat_start = 0;
+	var lat_end = 360;
+	var lat_step = 10.0;
 	///// Creates vertices
 	k = 0;
 	// for(j = 0; j < 1; j++) {
 	j = 0;
 	j_last = 36;
 	j_start = 0;
-	for (j = j_start; j < j_last; j++) {
-		vert4[k++] = [ - 2.0 * Math.cos(j * 10.0 / 180.0 * Math.PI), 0.0, - 2.0 * Math.sin(j * 10.0 / 180.0 * Math.PI)];
-		for (i = 0; i < 36; i++) {
-			x = (Math.sin(i * 10.0 / 180.0 * Math.PI)  - 2.0) * Math.cos(j * 10.0 / 180.0 * Math.PI);
-			y = (Math.cos(i * 10.0 / 180.0 * Math.PI)) / 2.0;
-			z = (Math.sin(i * 10.0 / 180.0 * Math.PI)  - 2.0) * Math.sin(j * 10.0 / 180.0 * Math.PI);
+	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
+		vert4[k++] = [ - 1.0 * Math.cos(j * lat_step / 180.0 * Math.PI), 0.0, - 1.0 * Math.sin(j * lat_step / 180.0 * Math.PI)];
+		for (i = lon_start/ lon_step; i < lon_end / lon_step; i++) {
+			x = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.cos(j * lat_step / 180.0 * Math.PI)) * s;
+			y = (Math.cos(i * lon_step / 180.0 * Math.PI)) * s;
+			z = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.sin(j * lat_step / 180.0 * Math.PI)) * s;
+
 			vert4[k++] = [x, y, z];
 		}
 	}
-	console.log(vert4.length)
 	// }
 
 	// for(j = 0; j < 648; j++) {
@@ -124,14 +133,15 @@ function buildGeometry() {
 	////// Creates indices
 	var ind4 = [];
 	k = 0;
-	for (j = j_start; j < j_last; j++) {
-		for (i = 1; i < 37; i++) {
-			ind4[k++] = j * 37;
-			ind4[k++] = j * 37 + i;
-			ind4[k++] = j * 37 + i + 1;
+	var lons = lon_end / lon_step + 1;
+	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
+		for (i = 1; i < lons; i++) {
+			ind4[k++] = j * lons;
+			ind4[k++] = j * lons + i;
+			ind4[k++] = j * lons + i + 1;
 
 		}
-		ind4[ind4.length - 1] = j * 37 + 1;
+		ind4[ind4.length - 1] = j * lons + 1;
 	}
 
 	// for(i=37; i < 37 + 36; i++) {
