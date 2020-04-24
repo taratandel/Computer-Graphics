@@ -93,8 +93,47 @@ function buildGeometry() {
 	
 	
 	// Draws a Torus -- To do for the assignment
-	var vert4 = [[-1.0,-1.0,0.0], [1.0,-1.0,0.0], [-1.0,1.0,0.0], [1.0,1.0,0.0]];
-	var ind4 = [0, 1, 2,   1, 3, 2];
+	var vert4 = [];
+	var s = 0.5; // scale
+
+	var lon_start = 0;
+	var lon_end = 360;
+	var lon_step = 10.0;
+
+	var lat_start = 0;
+	var lat_end = 360;
+	var lat_step = 10.0;
+	///// Creates vertices
+	k = 0;
+	j = 0;
+	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
+		for (i = lon_start/ lon_step; i < lon_end / lon_step; i++) {
+			x = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.cos(j * lat_step / 180.0 * Math.PI)) * s;
+			y = Math.cos(i * lon_step / 180.0 * Math.PI) * s;
+			z = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.sin(j * lat_step / 180.0 * Math.PI)) * s;
+
+			vert4[k++] = [x, y, z];
+		}
+	}
+
+	var ind4 = [];
+	k = 0;
+	var lons = parseInt((lon_end - lon_start) / lon_step, 10);
+	var lats = parseInt((lat_end - lat_start) / lat_step, 10);
+	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
+		for (i = lon_start/ lon_step; i < lon_end / lon_step; i++) {
+			ind4[k++] = j * lons + i;
+			ind4[k++] = j * lons + (i + 1) % lons;
+			ind4[k++] = ((j + 1) % lats) * lons + i;
+
+			ind4[k++] = j * lons + (i + 1) % lons;
+			ind4[k++] = ((j + 1) % lats) * lons + (i + 1) % lons;
+			ind4[k++] = ((j + 1) % lats) * lons + i;
+
+		}
+	}
+
+
 	var color4 = [1.0, 1.0, 0.0];
 	addMesh(vert4, ind4, color4);
 }
