@@ -33,25 +33,27 @@ function buildGeometry() {
 
 
 	// Draws a Cylinder -- To do for the assignment.
-	let vert2 = []
+	let vert2 = [];
+	k = 0;
 
 	//create circle upperPart
 	for (i = 0; i<36; i++){
-		vert2[i] = [Math.sin(i*10.0/180.0*Math.PI), 1.0, Math.cos(i*10.0/180.0*Math.PI)];
+		vert2[k++] = [Math.sin(i*10.0/180.0*Math.PI), 1.0, Math.cos(i*10.0/180.0*Math.PI)];
 	}
 
 	//create circle lower part
 	for (i = 0; i<36; i++){
-		vert2[i+36] = [Math.sin(i*10.0/180.0*Math.PI), -1.0, Math.cos(i*10.0/180.0*Math.PI)];
+		vert2[k++] = [Math.sin(i*10.0/180.0*Math.PI), -1.0, Math.cos(i*10.0/180.0*Math.PI)];
 	}
-	vert2[72] = [0.0, 1.0, 0.0];
-	vert2[73] = [0.0, -1.0, 0.0];
+	vert2[k++] = [0.0, 1.0, 0.0];
+	vert2[k++] = [0.0, -1.0, 0.0];
 	var ind2 = [];
-	j = 0
+
+	j = 0;
 	for(i = 0; i < 36; i++) {
 		ind2[j++] = 72;
-		ind2[j++] = (i + 1) % 36;
 		ind2[j++] = i;
+		ind2[j++] = (i + 1) % 36;
 	}
 
 	for (i = 0; i<36; i++) {
@@ -63,18 +65,12 @@ function buildGeometry() {
 		ind2[j++] = i+ 36;
 		ind2[j++] = (i+1) % 36 + 36;
 	}
-	// ind2[j++] = 0;
-	// ind2[j++] = 36;
-	// ind2[j++] = 1;
-	// ind2[j++] = 1;
-	// ind2[j++] = 36;
-	// ind2[j++] = 37;
 
 	for(i = 0; i < 36; i++) {
-		ind2[j++] = i + 36;
+		ind2[j++] = 73;
 
 		ind2[j++] = (i + 1) % 36 + 36;
-		ind2[j++] = 73;
+		ind2[j++] = i + 36;
 	}
 	var color2 = [0.0, 0.0, 1.0];
 	addMesh(vert2, ind2, color2);
