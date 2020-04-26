@@ -11,4 +11,4 @@ a surface or solid formed by rotating a closed curve, especially a circle, about
 
 <img width="500" src="./img/TorusFormula.png">
 
-<img width="500" src="./img/Torus.png">
+<img width="300" src="./img/Torus.png">
