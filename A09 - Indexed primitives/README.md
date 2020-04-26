@@ -9,6 +9,6 @@ a surface or solid formed by rotating a closed curve, especially a circle, about
 
 **Torus Formula**
 
-<img width="800" src="./img/TorusFormula.png">
+<img width="700" src="./img/TorusFormula.png">
 
 <img width="300" src="./img/Torus.png">
