@@ -63,20 +63,21 @@ var S2 = `
 
 // Single directional light, constant ambient
 var S3 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(1.0, 0.0, 0.0, 1.0);
+	lightDirA   = LADir;
+	lightColorA = ambientLightColor;
 `;
 
 // Single point light with decay
 var S4 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(0.0, 0.0, 1.0, 1.0);
+	
+	lightDirA   = pow(normalize(LAPos - fs_pos),LADecay);
+	lightColorA = LAlightColor;
 `;
 
 // Single spot light (with decay)
 var S5 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(1.0, 0.0, 1.0, 1.0);
+	lightDirA   = clamp(pow(normalize(LAPos - fs_pos),LADecay), (dot(normalize(LAPos - fs_pos), LADir) - LAConeOut)/ (LAConeIn - LAConeOut);
+	lightColorA = LAlightColor;
 `;
 
 // Single directional light, hemispheric ambient 
