@@ -64,32 +64,31 @@ var S2 = `
 // Single directional light, constant ambient
 var S3 = `
 	lightDirA   = LADir;
-	lightColorA = ambientLightColor;
+	lightColorA = LAlightColor * ambientLightColor;
 `;
 
 // Single point light with decay
 var S4 = `
-	
-	lightDirA   = pow(normalize(LAPos - fs_pos),LADecay);
-	lightColorA = LAlightColor;
+	lightDirA   = normalize(LAPos - fs_pos);
+	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay);
 `;
 
 // Single spot light (with decay)
 var S5 = `
-	lightDirA   = clamp(pow(normalize(LAPos - fs_pos),LADecay), (dot(normalize(LAPos - fs_pos), LADir) - LAConeOut)/ (LAConeIn - LAConeOut);
-	lightColorA = LAlightColor;
+	lightDirA   = normalize(LAPos - fs_pos);
+	lightColorA = LAlightColor * dot(pow(LATarget/length(LAPos - fs_pos), LADecay), clamp((dot(normalize(LAPos - fs_pos), LADir) - LAConeOut)/ (LAConeIn - LAConeOut), 0.0, 1.0));
 `;
 
 // Single directional light, hemispheric ambient 
 var S6 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(0.0, 1.0, 1.0, 1.0);
+	lightDirA   = LADir;
+	lightColorA = (((dot(normalVec, ADir) + 1.0)/2.0) * ambientLightColor + ((1.0 - (dot(normalVec, ADir)))/2.0) * ambientLightLowColor) * LAlightColor;
 `;
 
 // Three lights: a directional, a point and a spot
 var S7 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(1.0, 1.0, 1.0, 1.0);
+	lightDirA   = LADir + normalize(LAPos - fs_pos) + normalize(LAPos - fs_pos);
+	lightColorA = LAlightColor + LAlightColor + LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay) * clamp((dot(normalize(LAPos - fs_pos), LADir) - LAConeOut)/ (LAConeIn - LAConeOut), 0.0, 1.0);
 `;
 	return [S1, S2, S3, S4, S5, S6, S7];
 }
