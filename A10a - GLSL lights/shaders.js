@@ -76,7 +76,7 @@ var S4 = `
 // Single spot light (with decay)
 var S5 = `
 	lightDirA   = normalize(LAPos - fs_pos);
-	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay) * clamp((dot(lightDirA, LADir) - cos(LAConeOut/2.0))/ (cos(LAConeIn/2.0) - cos(LAConeOut/2.0)), 0.0, 1.0);
+	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay) * clamp((dot(lightDirA, LADir) - cos(radians(LAConeOut/2.0)))/ (cos(radians(LAConeIn * LAConeOut/2.0)) - cos(radians(LAConeOut/2.0))), 0.0, 1.0);
 `;
 
 
@@ -93,7 +93,7 @@ var S7 = `
 	lightDirC   = normalize(LCPos - fs_pos);
 	lightColorA = LAlightColor;
 	lightColorB = LBlightColor;
-	lightColorC = LClightColor * clamp((dot(lightDirC, LCDir) - cos(LCConeOut/2.0))/ (cos(LCConeIn/2.0) - cos(LCConeOut/2.0)), 0.0, 1.0);
+	lightColorC = LClightColor * clamp((dot(lightDirC, LCDir) - cos(radians(LCConeOut/2.0)))/ (cos(radians(LCConeIn*LCConeOut/2.0)) - cos(radians(LCConeOut/2.0))), 0.0, 1.0);
 	
 `;
 
