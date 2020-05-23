@@ -55,12 +55,30 @@ var S2 = `
 
 // No diffuse, ambient and Blinn specular
 var S3 = `
-	out_color = vec4(1.0, 0.0, 1.0, 1.0);
+	vec4 sLAcontr = pow(clamp(dot(normalize(eyedirVec+lightDirA), normalVec),0.0,1.0), SpecShine) * lightColorA;
+	vec4 sLBcontr = pow(clamp(dot(normalize(eyedirVec+lightDirB), normalVec),0.0,1.0), SpecShine) * lightColorB;
+	vec4 sLCcontr = pow(clamp(dot(normalize(eyedirVec+lightDirC), normalVec),0.0,1.0), SpecShine) * lightColorC;
+	vec4 specular = specularColor * (sLAcontr + sLBcontr + sLCcontr);
+	out_color = clamp(specular +  ambientLight * ambColor, 0.0, 1.0);
 `;
 
 // Diffuse and Phong specular
 var S4 = `
-	out_color = vec4(0.0, 1.0, 0.0, 1.0);
+	vec3 rA = -reflect(lightDirA,normalVec);
+	vec3 rB = -reflect(lightDirB,normalVec);
+	vec3 rC = -reflect(lightDirC,normalVec);
+	
+	vec4 sLAcontr = pow(clamp(dot(eyedirVec,rA), 0.0, 1.0), SpecShine) * lightColorA;
+	vec4 sLBcontr = pow(clamp(dot(eyedirVec,rB), 0.0, 1.0), SpecShine) * lightColorB;
+	vec4 sLCcontr = pow(clamp(dot(eyedirVec,rC), 0.0, 1.0), SpecShine) * lightColorC;
+	vec4 specular = specularColor * (sLAcontr + sLBcontr + sLCcontr);
+	
+	vec4 dLAcontr = clamp(dot(lightDirA, normalVec),0.0,1.0) * lightColorA;
+	vec4 dLBcontr = clamp(dot(lightDirB, normalVec),0.0,1.0) * lightColorB;
+	vec4 dLCcontr = clamp(dot(lightDirC, normalVec),0.0,1.0) * lightColorC;
+	vec4 diffuse = diffColor * (dLAcontr + dLBcontr + dLCcontr);
+	
+	out_color = clamp(diffuse + specular, 0.0, 1.0);
 `;
 
 // Diffuse, ambient, emission and Phong specular
