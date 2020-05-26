@@ -88,7 +88,28 @@ var S5 = `
 
 // Ambient + Oren-Nayar with roughness sigma=0.5 (consider only Light A)
 var S6 = `
-	out_color = vec4(0.0, 1.0, 1.0, 1.0);
+	float p = max(0.0, dot(lightDirA, normalVec));
+	float q = max(0.0, dot(eyedirVec, normalVec));
+	
+	float alpha = max(acos(p), acos(q));
+	float beta = min(acos(p), acos(q));
+	
+	float sigma = 0.5;
+	float sigma2 = sigma * sigma;
+	float A = 1.0 - 0.5 * sigma2 / (sigma2 + 0.33);
+	float B = 0.45 * sigma2 / (sigma2 + 0.09);
+	
+	vec3 vi = normalize(lightDirA - normalVec * p);
+	vec3 vr = normalize(eyedirVec - normalVec * q);
+	float G = max(0.0, dot(vi, vr));
+	
+	vec4 L = clamp(dot(lightDirA, normalVec),0.0,1.0) * lightColorA;
+	
+	vec4 diffuse = diffColor * L * (A + B * G * sin(alpha) * tan(beta));
+	
+	vec4 ambient = ambientLight * ambColor;
+	
+	out_color = clamp(diffuse + ambient, 0.0, 1.0); 
 `;
 
 	return [S1, S2, S3, S4, S5, S6];
