@@ -181,9 +181,44 @@ function buildGeometry() {
 	addMesh(vert5, norm5, ind5, color5);
 
 	// Draws a Torus -- To do for the assignment.
-	var vert6 = [[-1.0,-1.0,0.0], [1.0,-1.0,0.0], [1.0,1.0,0.0], [-1.0,1.0,0.0]];
-	var norm6 = [[ 0.0, 0.0,1.0], [0.0, 0.0,1.0], [0.0,0.0,1.0], [ 0.0,0.0,1.0]];
-	var ind6 = [0, 1, 2,  0, 2, 3];
+	var vert6 = [];
+	var norm6 = [];
+	var ind6 = [];
+
+	///// Creates vertices
+	var k = 0;
+	j = 0;
+	for (j = 0; j < 36; j++) {
+		for (i = 0; i < 36; i++) {
+			x = ((Math.sin(i * 10.0 / 180.0 * Math.PI)  - 2.0) * Math.cos(j * 10.0 / 180.0 * Math.PI));
+			y = Math.cos(i * 10.0 / 180.0 * Math.PI);
+			z = ((Math.sin(i * 10.0 / 180.0 * Math.PI)  - 2.0) * Math.sin(j * 10.0 / 180.0 * Math.PI));
+
+			var nx = Math.sin(i * 10.0 / 180.0 * Math.PI) * Math.cos(j * 10.0 / 180.0 * Math.PI);
+			var ny = Math.cos(i * 10.0 / 180.0 * Math.PI);
+			var nz = Math.sin(i * 10.0 / 180.0 * Math.PI) * Math.sin(j * 10.0 / 180.0 * Math.PI);
+
+
+			vert6[k] = [x, y, z];
+			norm6[k] = [nx, ny, nz];
+			k++;
+		}
+	}
+	k = 0;
+
+	for (j = 0; j < 36; j++) {
+		for (i = 0; i < 36; i++) {
+			ind6[k++] = j * 36 + i;
+			ind6[k++] = j * 36 + (i + 1) % 36;
+			ind6[k++] = ((j + 1) % 36) * 36 + i;
+
+			ind6[k++] = j * 36 + (i + 1) % 36;
+			ind6[k++] = ((j + 1) % 36) * 36 + (i + 1) % 36;
+			ind6[k++] = ((j + 1) % 36) * 36 + i;
+
+		}
+	}
+
 	var color6 = [1.0, 0.0, 0.0];
 	addMesh(vert6, norm6, ind6, color6);
 }
