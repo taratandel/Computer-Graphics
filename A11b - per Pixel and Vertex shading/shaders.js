@@ -155,10 +155,21 @@ layout(location = POSITION_LOCATION) in vec3 in_pos;
 layout(location = NORMAL_LOCATION) in vec3 in_norm;
 
 uniform mat4 pMatrix;
+out vec3 fs_pos;
 out vec3 fs_norm;
+out vec3 light;
+
+uniform vec3 LAPos;
+
 
 void main() {
+	// light
+	vec3 Ldir = normalize(LAPos - fs_pos);
+	light = Ldir;
 	fs_norm = in_norm;
+	fs_pos = in_pos;
+	
+	
 	gl_Position = pMatrix * vec4(in_pos, 1.0);
 }
 `;
@@ -168,11 +179,33 @@ var F3 = `#version 300 es
 precision highp float;
 
 in vec3 fs_norm;
-
+in vec3 fs_pos;
+in vec3 light;
 out vec4 color;
 
+uniform vec3 eyePos;
+uniform vec4 LAlightColor;
+uniform vec4 ambientLightColor;
+uniform vec4 diffuseColor;
+uniform vec4 specularColor;
+uniform float SpecShine;
+uniform vec4 ambientMatColor;
+uniform vec4 emitColor;
+
 void main() {	
-	color = vec4(fs_norm, 1.0);
+	vec3 norm = normalize(fs_norm);
+	
+	vec4 diffuse = diffuseColor * max(dot(normalize(norm), light), 0.0);
+	// specular
+	vec3 eyeDir = normalize(eyePos - fs_pos);
+	vec3 halfVec = normalize(eyeDir + light);
+	vec4 specular = specularColor * pow(max(dot(halfVec, norm),0.0),SpecShine);
+	// ambient
+	vec4 ambient = ambientLightColor * ambientMatColor;
+	// final
+	vec4 finalColor = clamp((diffuse + specular) * LAlightColor + ambient + emitColor, 0.0, 1.0);
+	
+	color = vec4(finalColor.rgb, 1.0);
 }
 `;
 
