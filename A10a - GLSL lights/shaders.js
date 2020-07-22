@@ -10,7 +10,7 @@ function shaders() {
 //float LADecay;		// Decay factor (0, 1 or 2)
 //float LATarget;		// Target distance
 //vec4 LAlightColor;	// color of the first light
-//		
+//
 //vec3 LBPos;			// Same as above, but for the second light
 //vec3 LBDir;
 //float LBConeOut;
@@ -63,33 +63,39 @@ var S2 = `
 
 // Single directional light, constant ambient
 var S3 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(1.0, 0.0, 0.0, 1.0);
+	lightDirA   = LADir;
+	lightColorA = LAlightColor + ambientLightColor;
 `;
 
 // Single point light with decay
 var S4 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(0.0, 0.0, 1.0, 1.0);
+	lightDirA   = normalize(LAPos - fs_pos);
+	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay);
 `;
 
 // Single spot light (with decay)
 var S5 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(1.0, 0.0, 1.0, 1.0);
+	lightDirA   = normalize(LAPos - fs_pos);
+	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay) * clamp((dot(lightDirA, LADir) - cos(radians(LAConeOut/2.0)))/ (cos(radians(LAConeIn * LAConeOut/2.0)) - cos(radians(LAConeOut/2.0))), 0.0, 1.0);
 `;
 
-// Single directional light, hemispheric ambient 
+
+// Single directional light, hemispheric ambient
 var S6 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(0.0, 1.0, 1.0, 1.0);
+	lightDirA   = LADir;
+	lightColorA = (((dot(normalVec, ADir) + 1.0)/2.0) * ambientLightColor + ((1.0 - (dot(normalVec, ADir)))/2.0) * ambientLightLowColor) + LAlightColor;
 `;
 
 // Three lights: a directional, a point and a spot
 var S7 = `
-	lightDirA   = vec3(1.0, 0.0, 0.0);
-	lightColorA = vec4(1.0, 1.0, 1.0, 1.0);
+	lightDirA   = LADir;
+	lightDirB   = normalize(LBPos - fs_pos);
+	lightDirC   = normalize(LCPos - fs_pos);
+	lightColorA = LAlightColor;
+	lightColorB = LBlightColor;
+	lightColorC = LClightColor * clamp((dot(lightDirC, LCDir) - cos(radians(LCConeOut/2.0)))/ (cos(radians(LCConeIn*LCConeOut/2.0)) - cos(radians(LCConeOut/2.0))), 0.0, 1.0);
+
 `;
+
 	return [S1, S2, S3, S4, S5, S6, S7];
 }
-

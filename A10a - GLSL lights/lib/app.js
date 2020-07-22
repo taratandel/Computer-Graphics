@@ -7,8 +7,8 @@ var gl = null,
 	imgtx = null,
 	skyboxLattx = null,
 	skyboxTbtx = null;
-	
-var projectionMatrix, 
+
+var projectionMatrix,
 	perspectiveMatrix,
 	viewMatrix,
 	worldMatrix,
@@ -89,11 +89,11 @@ function doResize() {
 		canvas.height = window.innerHeight-280;
 		var w=canvas.clientWidth;
 		var h=canvas.clientHeight;
-		
+
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.viewport(0.0, 0.0, w, h);
 		gl.clear(gl.COLOR_BUFFER_BIT);
-		
+
 		perspectiveMatrix = utils.MakePerspective(60, w/h, 0.1, 1000.0);
 
     }
@@ -182,7 +182,7 @@ function ChangeShader(delta) {
 		document.getElementById("nextButton").style.display = "";
 		document.getElementById("prevButton").style.display = "";
 	}
-	
+
 	document.getElementById("p1").innerHTML = reqData[curr_Shader].text;
 
 	for(var name in reqData[curr_Shader].sel) {
@@ -192,7 +192,7 @@ function ChangeShader(delta) {
 	}
 
 	setShader();
-}		
+}
 // Vertex shader
 var vs = `#version 300 es
 #define POSITION_LOCATION 0
@@ -214,7 +214,7 @@ void main() {
 	fs_pos = (wMatrix * vec4(in_pos, 1.0)).xyz;
 	fs_norm = in_norm;
 	fs_uv = vec2(in_uv.x, 1.0-in_uv.y);
-	
+
 	gl_Position = pMatrix * vec4(in_pos, 1.0);
 }`;
 
@@ -298,37 +298,37 @@ void main() {
 	vec4 diffColor = diffuseColor * (1.0-DTexMix) + texcol * DTexMix;
 	vec4 ambColor = ambientMatColor * (1.0-DTexMix) + texcol * DTexMix;
 	vec4 emit = emitColor * (1.0-DTexMix) +
-				   texcol * DTexMix * 
+				   texcol * DTexMix *
 				   			max(max(emitColor.r, emitColor.g), emitColor.b);
-	
+
 	vec3 normalVec = normalize(fs_norm);
 	vec3 eyedirVec = normalize(eyePos - fs_pos);
-	
+
 	vec3 lightDirA;
 	vec3 lightDirB;
 	vec3 lightDirC;
-	
+
 	vec4 lightColorA;
 	vec4 lightColorB;
 	vec4 lightColorC;
-	
+
 	vec4 ambientColor;
 `;
-var fs2 = `	
+var fs2 = `
 	// Ambient
 	vec4 ambient = ambientColor * ambColor;
 	// Diffuse
-	vec4 diffuse = compDiffuse(lightDirA, lightColorA, normalVec, diffColor) + 
+	vec4 diffuse = compDiffuse(lightDirA, lightColorA, normalVec, diffColor) +
 				   compDiffuse(lightDirB, lightColorB, normalVec, diffColor) +
 				   compDiffuse(lightDirC, lightColorC, normalVec, diffColor);
-	
+
 	// Specular
 	// --> Phong
 	vec4 specular = compSpecular(lightDirA, lightColorA, normalVec, eyedirVec) +
 					compSpecular(lightDirB, lightColorB, normalVec, eyedirVec) +
 					compSpecular(lightDirC, lightColorC, normalVec, eyedirVec);
 
-	vec4 out_color = clamp(ambient + diffuse + specular, 0.0, 1.0);	
+	vec4 out_color = clamp(ambient + diffuse + specular, 0.0, 1.0);
 	color = vec4(out_color.rgb, 1.0);
 }`;
 
@@ -352,7 +352,7 @@ function doMouseMove(event) {
 		var dy = lastMouseY - event.pageY;
 		lastMouseX = event.pageX;
 		lastMouseY = event.pageY;
-		
+
 		if((dx != 0) || (dy != 0)) {
 			angle = angle + 0.5 * dx;
 			elevation = elevation + 0.5 * dy;
@@ -535,7 +535,7 @@ UIonOff = {
 			S31:false, S32:false,
 			S41:true, S42:true
 		}
-	}, 
+	},
 	emissionType:{
 		Yes: {ME1:true,  ME2:true},
 		No:  {ME1:false, ME2:false}
@@ -608,7 +608,7 @@ defShaderParams = {
 	SpecShine: 100,
 	DToonTh: 50,
 	SToonTh: 90,
-	
+
 	emissionType: "No"
 }
 
@@ -620,7 +620,7 @@ function resetShaderParams() {
 			showHideUI(name, value);
 		}
 	}
-	
+
 	cx = 0.0;
 	cy = 0.0;
 	cz = 6.5;
@@ -628,7 +628,7 @@ function resetShaderParams() {
 	angle = 0.01;
 	roll = 0.01;
 	lookRadius = 10.0;
-	
+
 	if(gl) {
 		setWorldMesh();
 	}
@@ -772,17 +772,17 @@ unifParArray =[
 function setXwingMesh() {
 	// Load mesh using the webgl-obj-loader library
 	worldMesh = new OBJ.Mesh(xwingObjStr);
-	
+
 	// Create the textures
 	imgtx = new Image();
 	imgtx.txNum = 0;
 	imgtx.onload = textureLoaderCallback;
 	imgtx.src = XwingTextureData;
-	
+
 	worldScale = 1.0;
 
 	OBJ.initMeshBuffers(gl, worldMesh);
-	
+
 	document.getElementById("diffuseColor").value = "#dddd88";
 	document.getElementById("ambientMatColor").value = "#dddd88";
 	document.getElementById("my-canvas").style.backgroundColor = "#000033";
@@ -791,13 +791,13 @@ function setXwingMesh() {
 function setWorldMesh() {
 	// Load mesh using the webgl-obj-loader library
 	worldMesh = new OBJ.Mesh(worldObjStr);
-	
+
 	// Create the textures
 	imgtx = new Image();
 	imgtx.txNum = 0;
 	imgtx.onload = textureLoaderCallback;
 	imgtx.src = WorldTextureData;
-	
+
 	worldScale = 1.0;
 
 	OBJ.initMeshBuffers(gl, worldMesh);
@@ -809,13 +809,13 @@ function setWorldMesh() {
 function setHouseMesh() {
 	// Load mesh using the webgl-obj-loader library
 	worldMesh = new OBJ.Mesh(houseObjStr);
-	
+
 	// Create the textures
 	imgtx = new Image();
 	imgtx.txNum = 0;
 	imgtx.onload = textureLoaderCallback;
 	imgtx.src = HouseTextureData;
-	
+
 	worldScale = 0.3;
 
 	OBJ.initMeshBuffers(gl, worldMesh);
@@ -830,8 +830,8 @@ function setHouseMesh() {
 var textureLoaderCallback = function() {
 	var textureId = gl.createTexture();
 	gl.activeTexture(gl.TEXTURE0 + this.txNum);
-	gl.bindTexture(gl.TEXTURE_2D, textureId);		
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);		
+	gl.bindTexture(gl.TEXTURE_2D, textureId);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);
 // set the filtering so we don't need mips
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
@@ -851,23 +851,23 @@ function setShader() {
 //console.log(fs1 + ShadersCode[curr_Shader] + fs2);
 	var v2 = gl.createShader(gl.FRAGMENT_SHADER);
 	gl.shaderSource(v2, fs1 + ShadersCode[curr_Shader] + fs2)
-	gl.compileShader(v2);		
+	gl.compileShader(v2);
 	if (!gl.getShaderParameter(v2, gl.COMPILE_STATUS)) {
 		alert("ERROR IN FS SHADER : " + gl.getShaderInfoLog(v2));
-	}			
+	}
 	gl.attachShader(program, v1);
 	gl.attachShader(program, v2);
-	gl.linkProgram(program);				
-	
+	gl.linkProgram(program);
+
 	gl.useProgram(program);
-	
+
 	// links mesh attributes to shader attributes
 	program.vertexPositionAttribute = gl.getAttribLocation(program, "in_pos");
 	gl.enableVertexAttribArray(program.vertexPositionAttribute);
-	 
+
 	program.vertexNormalAttribute = gl.getAttribLocation(program, "in_norm");
 	gl.enableVertexAttribArray(program.vertexNormalAttribute);
-	 
+
 	program.textureCoordAttribute = gl.getAttribLocation(program, "in_uv");
 	gl.enableVertexAttribArray(program.textureCoordAttribute);
 
@@ -880,7 +880,7 @@ function setShader() {
 function main(){
 	ShadersCode = shaders();
 	resetShaderParams();
-	
+
 	// setup everything else
 	var canvas = document.getElementById("my-canvas");
 	canvas.addEventListener("mousedown", doMouseDown, false);
@@ -892,39 +892,39 @@ function main(){
 	window.onresize = doResize;
 	canvas.width  = window.innerWidth-16;
 	canvas.height = window.innerHeight-280;
-	
+
 	try{
 		gl= canvas.getContext("webgl2");
 	} catch(e){
 		console.log(e);
 	}
-	
-		
+
+
 	if(gl){
 		curr_Shader = -1;
 		ChangeShader(1);
 
 		setWorldMesh();
-						
+
 		// prepares the world, view and projection matrices.
 		var w=canvas.clientWidth;
 		var h=canvas.clientHeight;
-		
+
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.viewport(0.0, 0.0, w, h);
 		gl.clear(gl.COLOR_BUFFER_BIT);
-		
+
 		perspectiveMatrix = utils.MakePerspective(60, w/h, 0.1, 1000.0);
-		
+
 	 // turn on depth testing
 	    gl.enable(gl.DEPTH_TEST);
-	
-	
+
+
 		// algin the skybox with the light
 		gLightDir = [-1.0, 0.0, 0.0, 0.0];
 		skyboxWM = utils.MakeRotateYMatrix(135);
 		gLightDir = utils.multiplyMatrixVector(skyboxWM, gLightDir);
-	
+
 		drawScene();
 	}else{
 		alert("Error: WebGL not supported by your browser!");
@@ -933,10 +933,10 @@ function main(){
 
 function drawScene() {
 	// update WV matrix
-	
+
 	angle = angle + rvy;
 	elevation = elevation + rvx;
-	
+
 	cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 	cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 	cy = lookRadius * Math.sin(utils.degToRad(-elevation));
@@ -945,32 +945,32 @@ function drawScene() {
 		// Magic for moving the car
 		worldMatrix = utils.MakeScaleMatrix(worldScale);
 
-		projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);		
+		projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
 
-		
+
 		// draws the request
 		gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.vertexBuffer);
 		gl.vertexAttribPointer(program.vertexPositionAttribute, worldMesh.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	    gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.textureBuffer);
 	    gl.vertexAttribPointer(program.textureCoordAttribute, worldMesh.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		
+
 		gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.normalBuffer);
 		gl.vertexAttribPointer(program.vertexNormalAttribute, worldMesh.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		 
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, worldMesh.indexBuffer);		
+
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, worldMesh.indexBuffer);
 
 		gl.uniform1i(program.u_textureUniform, 0);
 		gl.uniform3f(program.eyePosUniform, cx, cy, cz);
 		WVPmatrix = utils.multiplyMatrices(projectionMatrix, worldMatrix);
 		gl.uniformMatrix4fv(program.pMatrixUniform, gl.FALSE, utils.transposeMatrix(WVPmatrix));
 		gl.uniformMatrix4fv(program.wMatrixUniform, gl.FALSE, utils.transposeMatrix(worldMatrix));
-		
+
 		for(var i = 0; i < unifParArray.length; i++) {
 			unifParArray[i].type(gl);
 		}
 
-		
+
 		gl.drawElements(gl.TRIANGLES, worldMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-		
-		window.requestAnimationFrame(drawScene);		
+
+		window.requestAnimationFrame(drawScene);
 }

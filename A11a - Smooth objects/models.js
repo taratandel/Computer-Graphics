@@ -1,11 +1,11 @@
 function buildGeometry() {
 	var i;
-	
+
 	// Draws a pyramid --- Already done, just for inspiration
 	var vert1 = [[0.0,1.0,0.0],[ 1.0,-1.0,-1.0],[-1.0,-1.0,-1.0],
-				 [0.0,1.0,0.0],[ 1.0,-1.0, 1.0],[ 1.0,-1.0,-1.0], 
-				 [0.0,1.0,0.0],[-1.0,-1.0, 1.0],[ 1.0,-1.0, 1.0], 
-				 [0.0,1.0,0.0],[-1.0,-1.0,-1.0],[-1.0,-1.0, 1.0], 
+				 [0.0,1.0,0.0],[ 1.0,-1.0, 1.0],[ 1.0,-1.0,-1.0],
+				 [0.0,1.0,0.0],[-1.0,-1.0, 1.0],[ 1.0,-1.0, 1.0],
+				 [0.0,1.0,0.0],[-1.0,-1.0,-1.0],[-1.0,-1.0, 1.0],
 				 [-1.0,-1.0,-1.0],[1.0,-1.0,-1.0], [1.0,-1.0,1.0], [-1.0,-1.0,1.0],
 				];
 	var norm1 = [[0.0, 0.4472,-0.8944], [0.0, 0.4472,-0.8944], [0.0, 0.4472,-0.8944],
@@ -17,7 +17,7 @@ function buildGeometry() {
 	var ind1 = [0, 1, 2,  3, 4, 5,  6, 7, 8,  9, 10, 11,  12, 13, 14,  12, 14, 15];
 	var color1 = [0.0, 0.0, 1.0];
 	addMesh(vert1, norm1, ind1, color1);
-	
+
 	// Draws a cube -- To do for the assignment.
 	var vert2 = [
 		[-1.0,-1.0,1.0], [1.0,-1.0,1.0], [1.0,1.0,1.0], [-1.0,1.0,1.0], // front
@@ -46,7 +46,7 @@ function buildGeometry() {
 	];
 	var color2 = [0.0, 1.0, 1.0];
 	addMesh(vert2, norm2, ind2, color2);
-	
+
 	// Draws a Cylinder --- Already done, just for inspiration
 	///// Creates vertices
 	var vert3 = [[0.0, 1.0, 0.0]];
@@ -91,7 +91,7 @@ function buildGeometry() {
 	var color3 = [1.0, 0.0, 1.0];
 	addMesh(vert3, norm3, ind3, color3);
 
-	
+
 	// Draws a Cone -- To do for the assignment.
 	var vert4 = [];
 	var norm4 = [];
@@ -149,7 +149,7 @@ function buildGeometry() {
 	lastVert = k;
 	norm5[k] = [0.0,-1.0,0.0];
 	vert5[k++] = [0.0,-1.0,0.0];
-	
+
 	////// Creates indices
 	var ind5 = [];
 	k = 0;
@@ -164,7 +164,7 @@ function buildGeometry() {
 			ind5[k++] = i + j * 36 + 1;
 			ind5[k++] = (i + 1) % 36 + j * 36 + 1;
 		}
-	}	
+	}
 	//////// Upper Cap
 	for(i = 0; i < 36; i++) {
 		ind5[k++] = 0;
@@ -222,4 +222,3 @@ function buildGeometry() {
 	var color6 = [1.0, 0.0, 0.0];
 	addMesh(vert6, norm6, ind6, color6);
 }
-
