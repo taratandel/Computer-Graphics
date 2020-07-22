@@ -10,7 +10,7 @@ function shaders() {
 //float LADecay;		// Decay factor (0, 1 or 2)
 //float LATarget;		// Target distance
 //vec4 LAlightColor;	// color of the first light
-//		
+//
 //vec3 LBPos;			// Same as above, but for the second light
 //vec3 LBDir;
 //float LBConeOut;
@@ -80,7 +80,7 @@ var S5 = `
 `;
 
 
-// Single directional light, hemispheric ambient 
+// Single directional light, hemispheric ambient
 var S6 = `
 	lightDirA   = LADir;
 	lightColorA = (((dot(normalVec, ADir) + 1.0)/2.0) * ambientLightColor + ((1.0 - (dot(normalVec, ADir)))/2.0) * ambientLightLowColor) + LAlightColor;
@@ -94,9 +94,8 @@ var S7 = `
 	lightColorA = LAlightColor;
 	lightColorB = LBlightColor;
 	lightColorC = LClightColor * clamp((dot(lightDirC, LCDir) - cos(radians(LCConeOut/2.0)))/ (cos(radians(LCConeIn*LCConeOut/2.0)) - cos(radians(LCConeOut/2.0))), 0.0, 1.0);
-	
+
 `;
 
 	return [S1, S2, S3, S4, S5, S6, S7];
 }
-

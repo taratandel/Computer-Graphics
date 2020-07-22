@@ -7,8 +7,8 @@ var gl = null,
 	imgtx = null,
 	skyboxLattx = null,
 	skyboxTbtx = null;
-
-var projectionMatrix,
+	
+var projectionMatrix, 
 	perspectiveMatrix,
 	viewMatrix,
 	worldMatrix,
@@ -89,11 +89,11 @@ function doResize() {
 		canvas.height = window.innerHeight-280;
 		var w=canvas.clientWidth;
 		var h=canvas.clientHeight;
-
+		
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.viewport(0.0, 0.0, w, h);
 		gl.clear(gl.COLOR_BUFFER_BIT);
-
+		
 		perspectiveMatrix = utils.MakePerspective(60, w/h, 0.1, 1000.0);
 
     }
@@ -101,68 +101,41 @@ function doResize() {
 
 
 var reqData = [
-	{text: "Single directional light",
-	 sel: {	ambientType: "none",
-			diffuseType: "lambert",
-			specularType: "blinn",
-			LAlightType: "direct",
-			LBlightType: "none",
-			LClightType: "none",
-			emissionType: "No"
-	 } },
-	{text: "Single point light without decay",
-	 sel: {	ambientType: "none",
+	{text: "Per vertex",
+	 sel: {	ambientType: "ambient",
 			diffuseType: "lambert",
 			specularType: "blinn",
 			LAlightType: "point",
 			LBlightType: "none",
 			LClightType: "none",
-			emissionType: "No"
+			emissionType: "Yes"
 	 } },
-	{text: "Single directional light, constant ambient",
+	{text: "Per pixel",
 	 sel: {	ambientType: "ambient",
-			diffuseType: "lambert",
-			specularType: "blinn",
-			LAlightType: "direct",
-			LBlightType: "none",
-			LClightType: "none",
-			emissionType: "No"
-	 } },
-	{text: "Single point light with decay",
-	 sel: {	ambientType: "none",
 			diffuseType: "lambert",
 			specularType: "blinn",
 			LAlightType: "point",
 			LBlightType: "none",
 			LClightType: "none",
-			emissionType: "No"
+			emissionType: "Yes"
 	 } },
-	{text: "Single spot light (with decay)",
-	 sel: {	ambientType: "none",
-			diffuseType: "lambert",
-			specularType: "blinn",
-			LAlightType: "spot",
-			LBlightType: "none",
-			LClightType: "none",
-			emissionType: "No"
-	 } },
-	{text: "Single directional light, hemispheric ambient",
-	 sel: {	ambientType: "hemispheric",
-			diffuseType: "lambert",
-			specularType: "blinn",
-			LAlightType: "direct",
-			LBlightType: "none",
-			LClightType: "none",
-			emissionType: "No"
-	 } },
-	{text: "Three lights: a directional, a point and a spot.",
+	{text: "Light per vertex, diffuse and specular per pixel",
 	 sel: {	ambientType: "ambient",
 			diffuseType: "lambert",
 			specularType: "blinn",
-			LAlightType: "direct",
-			LBlightType: "point",
-			LClightType: "spot",
-			emissionType: "No"
+			LAlightType: "point",
+			LBlightType: "none",
+			LClightType: "none",
+			emissionType: "Yes"
+	 } },
+	{text: "Light and diffuse per vertex, specular per pixel",
+	 sel: {	ambientType: "ambient",
+			diffuseType: "lambert",
+			specularType: "blinn",
+			LAlightType: "point",
+			LBlightType: "none",
+			LClightType: "none",
+			emissionType: "Yes"
 	 } }
 ];
 
@@ -182,7 +155,7 @@ function ChangeShader(delta) {
 		document.getElementById("nextButton").style.display = "";
 		document.getElementById("prevButton").style.display = "";
 	}
-
+	
 	document.getElementById("p1").innerHTML = reqData[curr_Shader].text;
 
 	for(var name in reqData[curr_Shader].sel) {
@@ -192,145 +165,7 @@ function ChangeShader(delta) {
 	}
 
 	setShader();
-}
-// Vertex shader
-var vs = `#version 300 es
-#define POSITION_LOCATION 0
-#define NORMAL_LOCATION 1
-#define UV_LOCATION 2
-
-layout(location = POSITION_LOCATION) in vec3 in_pos;
-layout(location = NORMAL_LOCATION) in vec3 in_norm;
-layout(location = UV_LOCATION) in vec2 in_uv;
-
-uniform mat4 pMatrix;
-uniform mat4 wMatrix;
-
-out vec3 fs_pos;
-out vec3 fs_norm;
-out vec2 fs_uv;
-
-void main() {
-	fs_pos = (wMatrix * vec4(in_pos, 1.0)).xyz;
-	fs_norm = in_norm;
-	fs_uv = vec2(in_uv.x, 1.0-in_uv.y);
-
-	gl_Position = pMatrix * vec4(in_pos, 1.0);
-}`;
-
-// Fragment shader
-var fs1 = `#version 300 es
-precision highp float;
-
-in vec3 fs_pos;
-in vec3 fs_norm;
-in vec2 fs_uv;
-
-uniform sampler2D u_texture;
-uniform vec3 eyePos;
-
-uniform vec4 ambientType;
-uniform vec4 diffuseType;
-uniform vec4 specularType;
-
-uniform vec4 LAlightType;
-uniform vec3 LAPos;
-uniform vec3 LADir;
-uniform float LAConeOut;
-uniform float LAConeIn;
-uniform float LADecay;
-uniform float LATarget;
-uniform vec4 LAlightColor;
-
-uniform vec4 LBlightType;
-uniform vec3 LBPos;
-uniform vec3 LBDir;
-uniform float LBConeOut;
-uniform float LBConeIn;
-uniform float LBDecay;
-uniform float LBTarget;
-uniform vec4 LBlightColor;
-
-uniform vec4 LClightType;
-uniform vec3 LCPos;
-uniform vec3 LCDir;
-uniform float LCConeOut;
-uniform float LCConeIn;
-uniform float LCDecay;
-uniform float LCTarget;
-uniform vec4 LClightColor;
-
-uniform vec4 ambientLightColor;
-uniform vec4 ambientLightLowColor;
-uniform vec3 ADir;
-uniform vec4 diffuseColor;
-uniform float DTexMix;
-uniform vec4 specularColor;
-uniform float SpecShine;
-uniform float DToonTh;
-uniform float SToonTh;
-uniform vec4 ambientMatColor;
-uniform vec4 emitColor;
-
-out vec4 color;
-
-vec4 compDiffuse(vec3 lightDir, vec4 lightCol, vec3 normalVec, vec4 diffColor) {
-	// Diffuse
-	// --> Lambert
-	vec4 diffuseLambert = lightCol * clamp(dot(normalVec, lightDir),0.0,1.0) * diffColor;
-	// ----> Select final component
-	return diffuseLambert;
-}
-
-vec4 compSpecular(vec3 lightDir, vec4 lightCol, vec3 normalVec, vec3 eyedirVec) {
-	// Specular
-	// --> Blinn
-	vec3 halfVec = normalize(lightDir + eyedirVec);
-	vec4 specularBlinn = lightCol * pow(max(dot(normalVec, halfVec), 0.0), SpecShine) * specularColor;
-
-	// ----> Select final component
-	return specularBlinn;
-}
-
-
-void main() {
-	vec4 texcol = texture(u_texture, fs_uv);
-	vec4 diffColor = diffuseColor * (1.0-DTexMix) + texcol * DTexMix;
-	vec4 ambColor = ambientMatColor * (1.0-DTexMix) + texcol * DTexMix;
-	vec4 emit = emitColor * (1.0-DTexMix) +
-				   texcol * DTexMix *
-				   			max(max(emitColor.r, emitColor.g), emitColor.b);
-
-	vec3 normalVec = normalize(fs_norm);
-	vec3 eyedirVec = normalize(eyePos - fs_pos);
-
-	vec3 lightDirA;
-	vec3 lightDirB;
-	vec3 lightDirC;
-
-	vec4 lightColorA;
-	vec4 lightColorB;
-	vec4 lightColorC;
-
-	vec4 ambientColor;
-`;
-var fs2 = `
-	// Ambient
-	vec4 ambient = ambientColor * ambColor;
-	// Diffuse
-	vec4 diffuse = compDiffuse(lightDirA, lightColorA, normalVec, diffColor) +
-				   compDiffuse(lightDirB, lightColorB, normalVec, diffColor) +
-				   compDiffuse(lightDirC, lightColorC, normalVec, diffColor);
-
-	// Specular
-	// --> Phong
-	vec4 specular = compSpecular(lightDirA, lightColorA, normalVec, eyedirVec) +
-					compSpecular(lightDirB, lightColorB, normalVec, eyedirVec) +
-					compSpecular(lightDirC, lightColorC, normalVec, eyedirVec);
-
-	vec4 out_color = clamp(ambient + diffuse + specular, 0.0, 1.0);
-	color = vec4(out_color.rgb, 1.0);
-}`;
+}		
 
 // event handler
 
@@ -352,7 +187,7 @@ function doMouseMove(event) {
 		var dy = lastMouseY - event.pageY;
 		lastMouseX = event.pageX;
 		lastMouseY = event.pageY;
-
+		
 		if((dx != 0) || (dy != 0)) {
 			angle = angle + 0.5 * dx;
 			elevation = elevation + 0.5 * dy;
@@ -389,8 +224,8 @@ UIonOff = {
 		},
 		point:{
 			LA13:true, LA14:true,
-			LA21:true, LA22:true, LA23:true, LA24:true,
-			LA31:true, LA32:true, LA33:true, LA34:true,
+			LA21:true, LA22:true, LA23:false, LA24:false,
+			LA31:true, LA32:true, LA33:false, LA34:false,
 			LA41:true, LA42:true, LA43:false, LA44:false,
 			LA51:false, LA52:false, LA53:false, LA54:false,
 			LA61:false, LA62:false
@@ -423,8 +258,8 @@ UIonOff = {
 		},
 		point:{
 			LB13:true, LB14:true,
-			LB21:true, LB22:true, LB23:true, LB24:true,
-			LB31:true, LB32:true, LB33:true, LB34:true,
+			LB21:true, LB22:true, LB23:false, LB24:false,
+			LB31:true, LB32:true, LB33:false, LB34:false,
 			LB41:true, LB42:true, LB43:false, LB44:false,
 			LB51:false, LB52:false, LB53:false, LB54:false,
 			LB61:false, LB62:false
@@ -535,7 +370,7 @@ UIonOff = {
 			S31:false, S32:false,
 			S41:true, S42:true
 		}
-	},
+	}, 
 	emissionType:{
 		Yes: {ME1:true,  ME2:true},
 		No:  {ME1:false, ME2:false}
@@ -556,60 +391,18 @@ function showLight(sel) {
 }
 
 defShaderParams = {
-	ambientType: "ambient",
-	diffuseType: "lambert",
-	specularType: "phong",
-	ambientLightColor: "#555555",
+	ambientLightColor: "#222222",
 	diffuseColor: "#00ffff",
 	specularColor: "#ffffff",
-	ambientLightLowColor: "#002200",
-	ambientMatColor: "#00ffff",
-	emitColor: "#888888",
+	ambientMatColor: "#ffffff",
+	emitColor: "#000000",
 
-	LAlightType: "direct",
 	LAlightColor: "#ffffff",
 	LAPosX: 20,
-	LAPosY: 30,
+	LAPosY: 250,
 	LAPosZ: 50,
-	LADirTheta: 60,
-	LADirPhi: 45,
-	LAConeOut: 30,
-	LAConeIn: 80,
-	LADecay: 0,
-	LATarget: 61,
 
-	LBlightType: "none",
-	LBlightColor: "#ffffff",
-	LBPosX: -40,
-	LBPosY: 30,
-	LBPosZ: 50,
-	LBDirTheta: 60,
-	LBDirPhi: 135,
-	LBConeOut: 30,
-	LBConeIn: 80,
-	LBDecay: 0,
-	LBTarget: 61,
-
-	LClightType: "none",
-	LClightColor: "#ffffff",
-	LCPosX: 60,
-	LCPosY: 30,
-	LCPosZ: 50,
-	LCDirTheta: 60,
-	LCDirPhi: -45,
-	LCConeOut: 30,
-	LCConeIn: 80,
-	LCDecay: 0,
-	LCTarget: 61,
-
-	ADirTheta: 0,
-	ADirPhi: 0,
-	DTexMix: 100,
-	SpecShine: 100,
-	DToonTh: 50,
-	SToonTh: 90,
-
-	emissionType: "No"
+	SpecShine: 100
 }
 
 function resetShaderParams() {
@@ -620,7 +413,7 @@ function resetShaderParams() {
 			showHideUI(name, value);
 		}
 	}
-
+	
 	cx = 0.0;
 	cy = 0.0;
 	cz = 6.5;
@@ -628,7 +421,7 @@ function resetShaderParams() {
 	angle = 0.01;
 	roll = 0.01;
 	lookRadius = 10.0;
-
+	
 	if(gl) {
 		setWorldMesh();
 	}
@@ -721,49 +514,16 @@ function valType(gl) {
 
 
 unifParArray =[
-	new unifPar("ambientType","ambientType", valType),
-	new unifPar("diffuseType","diffuseType", valType),
-	new unifPar("specularType","specularType", valType),
-
-	new unifPar("LAlightType","LAlightType", valType),
-	new unifPar("LAPos","LAPos", valVec3),
-	new unifPar("LADir","LADir", valDir),
-	new unifPar("LAConeOut","LAConeOut", val),
-	new unifPar("LAConeIn","LAConeIn", valD100),
-	new unifPar("LADecay","LADecay", val),
-	new unifPar("LATarget","LATarget", valD10),
 	new unifPar("LAlightColor","LAlightColor", valCol),
-
-	new unifPar("LBlightType","LBlightType", valType),
-	new unifPar("LBPos","LBPos", valVec3),
-	new unifPar("LBDir","LBDir", valDir),
-	new unifPar("LBConeOut","LBConeOut", val),
-	new unifPar("LBConeIn","LBConeIn", valD100),
-	new unifPar("LBDecay","LBDecay", val),
-	new unifPar("LBTarget","LBTarget", valD10),
-	new unifPar("LBlightColor","LBlightColor", valCol),
-
-	new unifPar("LClightType","LClightType", valType),
-	new unifPar("LCPos","LCPos", valVec3),
-	new unifPar("LCDir","LCDir", valDir),
-	new unifPar("LCConeOut","LCConeOut", val),
-	new unifPar("LCConeIn","LCConeIn", valD100),
-	new unifPar("LCDecay","LCDecay", val),
-	new unifPar("LCTarget","LCTarget", valD10),
-	new unifPar("LClightColor","LClightColor", valCol),
+	new unifPar("LAPos","LAPos", valVec3),
 
 	new unifPar("ambientLightColor","ambientLightColor", valCol),
-	new unifPar("ambientLightLowColor","ambientLightLowColor", valCol),
-	new unifPar("ADir","ADir", valDir),
 	new unifPar("diffuseColor","diffuseColor", valCol),
-	new unifPar("DTexMix","DTexMix", valD100),
 	new unifPar("specularColor","specularColor", valCol),
 	new unifPar("SpecShine","SpecShine", val),
-	new unifPar("DToonTh","DToonTh", valD100),
-	new unifPar("SToonTh","SToonTh", valD100),
 	new unifPar("ambientMatColor","ambientMatColor", valCol),
 	new unifPar("emitColor","emitColor", valCol),
-	new unifPar("","u_texture", noAutoSet),
+
 	new unifPar("","pMatrix", noAutoSet),
 	new unifPar("","wMatrix", noAutoSet),
 	new unifPar("","eyePos", noAutoSet)
@@ -772,17 +532,14 @@ unifParArray =[
 function setXwingMesh() {
 	// Load mesh using the webgl-obj-loader library
 	worldMesh = new OBJ.Mesh(xwingObjStr);
-
+	
 	// Create the textures
 	imgtx = new Image();
-	imgtx.txNum = 0;
-	imgtx.onload = textureLoaderCallback;
-	imgtx.src = XwingTextureData;
-
+	
 	worldScale = 1.0;
 
 	OBJ.initMeshBuffers(gl, worldMesh);
-
+	
 	document.getElementById("diffuseColor").value = "#dddd88";
 	document.getElementById("ambientMatColor").value = "#dddd88";
 	document.getElementById("my-canvas").style.backgroundColor = "#000033";
@@ -791,13 +548,10 @@ function setXwingMesh() {
 function setWorldMesh() {
 	// Load mesh using the webgl-obj-loader library
 	worldMesh = new OBJ.Mesh(worldObjStr);
-
+	
 	// Create the textures
 	imgtx = new Image();
-	imgtx.txNum = 0;
-	imgtx.onload = textureLoaderCallback;
-	imgtx.src = WorldTextureData;
-
+	
 	worldScale = 1.0;
 
 	OBJ.initMeshBuffers(gl, worldMesh);
@@ -809,13 +563,10 @@ function setWorldMesh() {
 function setHouseMesh() {
 	// Load mesh using the webgl-obj-loader library
 	worldMesh = new OBJ.Mesh(houseObjStr);
-
+	
 	// Create the textures
 	imgtx = new Image();
-	imgtx.txNum = 0;
-	imgtx.onload = textureLoaderCallback;
-	imgtx.src = HouseTextureData;
-
+	
 	worldScale = 0.3;
 
 	OBJ.initMeshBuffers(gl, worldMesh);
@@ -827,49 +578,49 @@ function setHouseMesh() {
 
 
 // texture loader callback
-var textureLoaderCallback = function() {
-	var textureId = gl.createTexture();
-	gl.activeTexture(gl.TEXTURE0 + this.txNum);
-	gl.bindTexture(gl.TEXTURE_2D, textureId);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);
-// set the filtering so we don't need mips
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-}
+//var textureLoaderCallback = function() {
+//	var textureId = gl.createTexture();
+//	gl.activeTexture(gl.TEXTURE0 + this.txNum);
+//	gl.bindTexture(gl.TEXTURE_2D, textureId);		
+//	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);		
+//
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+//}
 
 function setShader() {
 	// Compile and link shaders
 	program = gl.createProgram();
 	var v1 = gl.createShader(gl.VERTEX_SHADER);
-	gl.shaderSource(v1, vs);
+	gl.shaderSource(v1, ShadersCode[curr_Shader * 2]);
 	gl.compileShader(v1);
 	if (!gl.getShaderParameter(v1, gl.COMPILE_STATUS)) {
 		alert("ERROR IN VS SHADER : " + gl.getShaderInfoLog(v1));
 	}
 //console.log(fs1 + ShadersCode[curr_Shader] + fs2);
 	var v2 = gl.createShader(gl.FRAGMENT_SHADER);
-	gl.shaderSource(v2, fs1 + ShadersCode[curr_Shader] + fs2)
-	gl.compileShader(v2);
+	gl.shaderSource(v2, ShadersCode[curr_Shader * 2 + 1])
+	gl.compileShader(v2);		
 	if (!gl.getShaderParameter(v2, gl.COMPILE_STATUS)) {
 		alert("ERROR IN FS SHADER : " + gl.getShaderInfoLog(v2));
-	}
+	}			
 	gl.attachShader(program, v1);
 	gl.attachShader(program, v2);
-	gl.linkProgram(program);
-
+	gl.linkProgram(program);				
+	
 	gl.useProgram(program);
-
+	
 	// links mesh attributes to shader attributes
 	program.vertexPositionAttribute = gl.getAttribLocation(program, "in_pos");
 	gl.enableVertexAttribArray(program.vertexPositionAttribute);
-
+	 
 	program.vertexNormalAttribute = gl.getAttribLocation(program, "in_norm");
 	gl.enableVertexAttribArray(program.vertexNormalAttribute);
-
-	program.textureCoordAttribute = gl.getAttribLocation(program, "in_uv");
-	gl.enableVertexAttribArray(program.textureCoordAttribute);
+	 
+//	program.textureCoordAttribute = gl.getAttribLocation(program, "in_uv");
+//	gl.enableVertexAttribArray(program.textureCoordAttribute);
 
 	for(var i = 0; i < unifParArray.length; i++) {
 		program[unifParArray[i].pGLSL+"Uniform"] = gl.getUniformLocation(program, unifParArray[i].pGLSL);
@@ -880,7 +631,7 @@ function setShader() {
 function main(){
 	ShadersCode = shaders();
 	resetShaderParams();
-
+	
 	// setup everything else
 	var canvas = document.getElementById("my-canvas");
 	canvas.addEventListener("mousedown", doMouseDown, false);
@@ -892,39 +643,39 @@ function main(){
 	window.onresize = doResize;
 	canvas.width  = window.innerWidth-16;
 	canvas.height = window.innerHeight-280;
-
+	
 	try{
 		gl= canvas.getContext("webgl2");
 	} catch(e){
 		console.log(e);
 	}
-
-
+	
+		
 	if(gl){
 		curr_Shader = -1;
 		ChangeShader(1);
 
 		setWorldMesh();
-
+						
 		// prepares the world, view and projection matrices.
 		var w=canvas.clientWidth;
 		var h=canvas.clientHeight;
-
+		
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.viewport(0.0, 0.0, w, h);
 		gl.clear(gl.COLOR_BUFFER_BIT);
-
+		
 		perspectiveMatrix = utils.MakePerspective(60, w/h, 0.1, 1000.0);
-
+		
 	 // turn on depth testing
 	    gl.enable(gl.DEPTH_TEST);
-
-
+	
+	
 		// algin the skybox with the light
 		gLightDir = [-1.0, 0.0, 0.0, 0.0];
 		skyboxWM = utils.MakeRotateYMatrix(135);
 		gLightDir = utils.multiplyMatrixVector(skyboxWM, gLightDir);
-
+	
 		drawScene();
 	}else{
 		alert("Error: WebGL not supported by your browser!");
@@ -933,10 +684,10 @@ function main(){
 
 function drawScene() {
 	// update WV matrix
-
+	
 	angle = angle + rvy;
 	elevation = elevation + rvx;
-
+	
 	cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 	cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 	cy = lookRadius * Math.sin(utils.degToRad(-elevation));
@@ -945,32 +696,32 @@ function drawScene() {
 		// Magic for moving the car
 		worldMatrix = utils.MakeScaleMatrix(worldScale);
 
-		projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
+		projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);		
 
-
+		
 		// draws the request
 		gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.vertexBuffer);
 		gl.vertexAttribPointer(program.vertexPositionAttribute, worldMesh.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	    gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.textureBuffer);
-	    gl.vertexAttribPointer(program.textureCoordAttribute, worldMesh.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
+//	    gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.textureBuffer);
+//	    gl.vertexAttribPointer(program.textureCoordAttribute, worldMesh.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		
 		gl.bindBuffer(gl.ARRAY_BUFFER, worldMesh.normalBuffer);
 		gl.vertexAttribPointer(program.vertexNormalAttribute, worldMesh.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		 
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, worldMesh.indexBuffer);		
 
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, worldMesh.indexBuffer);
-
-		gl.uniform1i(program.u_textureUniform, 0);
+//		gl.uniform1i(program.u_textureUniform, 0);
 		gl.uniform3f(program.eyePosUniform, cx, cy, cz);
 		WVPmatrix = utils.multiplyMatrices(projectionMatrix, worldMatrix);
 		gl.uniformMatrix4fv(program.pMatrixUniform, gl.FALSE, utils.transposeMatrix(WVPmatrix));
 		gl.uniformMatrix4fv(program.wMatrixUniform, gl.FALSE, utils.transposeMatrix(worldMatrix));
-
+		
 		for(var i = 0; i < unifParArray.length; i++) {
 			unifParArray[i].type(gl);
 		}
 
-
+		
 		gl.drawElements(gl.TRIANGLES, worldMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-
-		window.requestAnimationFrame(drawScene);
+		
+		window.requestAnimationFrame(drawScene);		
 }
