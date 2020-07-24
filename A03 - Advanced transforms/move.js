@@ -1,3 +1,8 @@
+//matrices appear in reverse order with respect to the transformations they represent.
+//To summarize, a rotation of α about an arbitrary axis passing through point (px, py, pz)
+// and such that the x-axis can be aligned to it by first rotating an angle γ around the z-axis,
+// and then an angle β around the y-axis, can be computed as:
+// p'=T(px,py,pz)⋅Ry(β)⋅Rz(γ)⋅Rx(α)⋅Rz(γ)−1 ⋅Ry(β)−1⋅S(a)⋅T(px,py,pz)−1 ⋅p
 function move() {
 	// Rotate 45 degrees around an arbitrary axis passing through (1,0,-1). The x-axis can be aligned to the arbitrary axis after a rotation of 30 degrees around the z-axis, and then -60 degrees around the y-axis.
 	var R1 =[1.0,		0.0,		0.0,		0.0,
@@ -22,6 +27,7 @@ function move() {
     R1 = utils.multiplyMatrices(R1, utils.invertMatrix(utils.MakeRotateYMatrix(-60)))
     R1 = utils.multiplyMatrices(R1, utils.invertMatrix(utils.MakeTranslateMatrix(1, 0, -1)))					   
 	// Half the size of an object, using as fixed point (5,0,-2)
+	//translate.scale.inverseTranslate
 	var S1 = [1.0,		0.0,		0.0,		0.0,
 			   0.0,		1.0,		0.0,		0.0,
 			   0.0,		0.0,		1.0,		0.0,
