@@ -31,6 +31,8 @@ function shaders() {
 // vec4 ambientLight;
 
 // Lambert diffuse and Ambient material
+// nx = normalVec
+//
 var S1 = `
 	vec4 LAcontr = clamp(dot(lightDirA, normalVec),0.0,1.0) * lightColorA;
 	vec4 LBcontr = clamp(dot(lightDirB, normalVec),0.0,1.0) * lightColorB;
