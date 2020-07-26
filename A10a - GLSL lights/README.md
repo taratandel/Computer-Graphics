@@ -3,11 +3,11 @@
 
 Each light model describes how light is emitted in the different directions of the space. It takes as input the position of a point x of an object. It returns a vector that represents the direction of the light, and a color which accounts for the quantity of light emitted for every wavelength.
 
-The light direction specified with: 
-<img width="200" src="./img/lightDir.png">
-<img width="200" src="./img/lightDirUnitary.png">
+The light direction specified with: \
+<img width="200" src="./img/lightDir.png"> \
+<img width="50" src="./img/lightDirUnitary.png">
 
-#### Direct Light
+### Direct Light
 Directional lights are sources that are very far away from the objects
 
 ### Point Light
