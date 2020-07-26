@@ -1,5 +1,4 @@
 # GLSL Lights
----------------------------------
 
 Each light model describes how light is emitted in the different directions of the space. It takes as input the position of a point x of an object. It returns a vector that represents the direction of the light, and a color which accounts for the quantity of light emitted for every wavelength.
 
