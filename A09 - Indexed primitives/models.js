@@ -3,19 +3,26 @@ function buildGeometry() {
 	
 	// Draws a Cone --- Already done, just for inspiration
 	///// Creates vertices
+	//نقطه‌ی بالایی مخروط
 	var vert1 = [[0.0, 1.0, 0.0]];
+	// y برابر با منفی یک چون باید پایین باشه
+	// بقیه نقاط دورشن
+	// برای کشیدن دایره
 	for(i = 0; i < 36; i++) {
 		vert1[i+1] = [Math.sin(i*10.0/180.0*Math.PI), -1.0, Math.cos(i*10.0/180.0*Math.PI)];
 	}
+	// نقطه‌ی مرکزی دایره
 	vert1[37] = [0.0, -1.0, 0.0]
 	////// Creates indices
 	var ind1 = [];
 	//////// Upper part
+	// همیشه اولیش اون نقطه وسطس
+	// بعد دورش
 	j = 0;
 	for(i = 0; i < 36; i++) {
 		ind1[j++] = 0;
-		ind1[j++] = i + 1;
-		ind1[j++] = (i + 1) % 36 + 1;
+		ind1[j++] = i + 1; // first point
+		ind1[j++] = (i + 1) % 36 + 1; // second point
 	}
 	//////// Lower part
 	for(i = 0; i < 36; i++) {
@@ -140,14 +147,18 @@ function buildGeometry() {
 	var lat_start = 0;
 	var lat_end = 360;
 	var lat_step = 10.0;
+
+	let R = -2.0;
+
+	let r = 1.0;
 	///// Creates vertices
 	k = 0;
 	j = 0;
 	for (j = lat_start / lat_step; j < lat_end / lat_step; j++) {
 		for (i = lon_start/ lon_step; i < lon_end / lon_step; i++) {
-			x = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.cos(j * lat_step / 180.0 * Math.PI)) * s;
-			y = Math.cos(i * lon_step / 180.0 * Math.PI) * s;
-			z = ((Math.sin(i * lon_step / 180.0 * Math.PI)  - 2.0) * Math.sin(j * lat_step / 180.0 * Math.PI)) * s;
+			x = ((r*Math.sin(i * lon_step / 180.0 * Math.PI) + R) * Math.cos(j * lat_step / 180.0 * Math.PI)) * s;
+			y = r*Math.cos(i * lon_step / 180.0 * Math.PI) * s;
+			z = ((r*Math.sin(i * lon_step / 180.0 * Math.PI) + R) * Math.sin(j * lat_step / 180.0 * Math.PI)) * s;
 
 			vert4[k++] = [x, y, z];
 		}

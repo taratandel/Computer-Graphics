@@ -1,5 +1,5 @@
 function parallel() {
-  // Build a parallel projection matrix, for a 16/9 viewport, with halfwidt w=40, near plane n=1, and far plane f=101.
+  // Build a parallel projection matrix, for a 16/9 viewport, with half-width w=40, near plane n=1, and far plane f=101.
   //first it moves the center of the projection box in the origin with a translation
   //  normalizes the coordinates between -1 and 1 by performing a scale transformation
   //  The last step converts the system from right-handed to left-handed, by inverting the z-axis with the mirror transformation

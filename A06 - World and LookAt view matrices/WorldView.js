@@ -55,9 +55,9 @@ function createViewMatrix(carPosition,camPosition) {
 	let vy = utils.crossVector(vzn, vxn);
 
 	var Mc = [vxn[0], vy[0], vzn[0], c[0],
-		vxn[1], vy[1], vzn[1], c[1],
-		vxn[2], vy[2], vzn[2], c[2],
-		0,     0,     0,     1];
+			  vxn[1], vy[1], vzn[1], c[1],
+			  vxn[2], vy[2], vzn[2], c[2],
+			      0,     0,     0,     1];
 
 	let view = utils.invertMatrix(Mc);
 	return view;
