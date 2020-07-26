@@ -56,24 +56,32 @@ var S1 = `
 `;
 
 // Single point light without decay
+// The direction varies depending on the point x of the object
+// p light position
+// lx=normalize(p-x)
 var S2 = `
 	lightDirA = normalize(LAPos - fs_pos);
 	lightColorA = LAlightColor;
 `;
 
 // Single directional light, constant ambient
+// Ambient lighting is the simplest approximation for indirect illumination
 var S3 = `
 	lightDirA   = LADir;
 	lightColorA = LAlightColor + ambientLightColor;
 `;
 
 // Single point light with decay
+// L(l, lx) = (g/|p-x|)^ß*l
+// ß decay factor
+// g that represents the distance at which the light reduction is exactly 1 (Target distance)
 var S4 = `
 	lightDirA   = normalize(LAPos - fs_pos);
 	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay);
 `;
 
 // Single spot light (with decay)
+// Spot lights are conic sources characterized by a direction d and a position p
 var S5 = `
 	lightDirA   = normalize(LAPos - fs_pos);
 	lightColorA = LAlightColor * pow(LATarget/length(LAPos - fs_pos), LADecay) * clamp((dot(lightDirA, LADir) - cos(radians(LAConeOut/2.0)))/ (cos(radians(LAConeIn * LAConeOut/2.0)) - cos(radians(LAConeOut/2.0))), 0.0, 1.0);
@@ -81,6 +89,7 @@ var S5 = `
 
 
 // Single directional light, hemispheric ambient
+//
 var S6 = `
 	lightDirA   = LADir;
 	lightColorA = (((dot(normalVec, ADir) + 1.0)/2.0) * ambientLightColor + ((1.0 - (dot(normalVec, ADir)))/2.0) * ambientLightLowColor) + LAlightColor;

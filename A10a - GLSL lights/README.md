@@ -14,3 +14,10 @@ Point lights are sources that emit light from fixed points in the space, and cha
 
 ### Spot Light
 Spot lights are conic sources characterized by a direction d and a position p.
+<img width="500" src="./img/SpotlightFormula.png">
+
+### Hemispheric lighting
+The two colors, lU and lD, represent the values of the ambient light at the two extremes, and the direction vector d orients the
+blending of the two colors
+
+<img width="400" src="./img/hemispheric.png">
